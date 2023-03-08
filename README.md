@@ -1,19 +1,19 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/CarltonOsinde/Video-MP3-Converter">
-    <img src="assets/VideoMP3Converter.png" alt="Logo" width="150" height="150">
+  <a href="https://github.com/CarltonOsinde/Movie-Reviewer">
+    <img src="assets/" alt="Logo" width="150" height="150">
   </a>
 
-<h3 align="center">Movie-Reviewer/h3>
+<h3 align="center">Movie Reviewer</h3>
 
   <p align="center">
-    A Video to MP3 converter that is built on a Microservice architecture and Docker image deployed on Kubernetes cluster.
+    Details coming soon.
     <br />
     <a href="https://github.com/CarltonOsinde/Movie-Reviewer"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/CarltonOsinde/Movie-Reviewer">View Demo</a>
+    <a href="https://github.com/CarltonOsinde/VMovie-Reviewer">View Demo</a>
     ·
     <a href="https://github.com/CarltonOsinde/Movie-Reviewer/issues">Report Bug</a>
     ·
