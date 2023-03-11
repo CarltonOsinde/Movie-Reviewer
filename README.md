@@ -2,13 +2,13 @@
 <br />
 <div align="center">
   <a href="https://github.com/CarltonOsinde/Movie-Reviewer">
-    <img src="assets/" alt="Logo" width="150" height="150">
+    <img src="assets/MovieReviewer.png" alt="Logo" width="150" height="150">
   </a>
 
 <h3 align="center">Movie Reviewer</h3>
 
   <p align="center">
-    Details coming soon.
+A web app similar to a IMDB that loads movie suggestions from a database.
     <br />
     <a href="https://github.com/CarltonOsinde/Movie-Reviewer"><strong>Explore the docs »</strong></a>
     <br />
@@ -53,15 +53,16 @@
     <img src="assets/product_screenshot.png" alt="Product Screenshot">
 </a>
 
-Details coming soon
-
+This is a React app that loads movie suggestions from a MongoDB database & uses Java Spring Boot backend to handle requests.
 
 
 
 ### Built With
 
-* Details coming soon
-
+* Java (Spring Boot)
+* Javascript(React.js)
+* MongoDB
+* Axios HTTP
 
 
 <!-- USAGE EXAMPLES -->
