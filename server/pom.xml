@@ -12,7 +12,7 @@
 	<artifactId>moviereviewer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>moviereviewer</name>
-	<description>A simple APIs related to movies</description>
+	<description>REST API for the Movie Reviewer app: browse movies and post reviews</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -33,16 +33,11 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!--Additional Dependency to ensure Springboot can read our .env files-->
+		<!-- Loads variables from a local .env file into the Spring environment -->
 		<dependency>
 			<groupId>me.paulschwarz</groupId>
 			<artifactId>spring-dotenv</artifactId>
@@ -55,14 +50,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

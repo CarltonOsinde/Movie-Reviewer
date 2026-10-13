@@ -1,136 +1,104 @@
-<!-- PROJECT LOGO -->
-<br />
 <div align="center">
-  <a href="https://github.com/CarltonOsinde/Movie-Reviewer">
-    <img src="assets/MovieReviewer.png" alt="Logo" width="150" height="150">
-  </a>
-
-<h3 align="center">Movie Reviewer</h3>
-
-  <p align="center">
-A web app similar to a IMDB that loads movie suggestions from a database.
-    <br />
-    <a href="https://github.com/CarltonOsinde/Movie-Reviewer"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/CarltonOsinde/VMovie-Reviewer">View Demo</a>
-    ·
-    <a href="https://github.com/CarltonOsinde/Movie-Reviewer/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/CarltonOsinde/Movie-Reviewer/issues">Request Feature</a>
-  </p>
+  <img src="assets/MovieReviewer.png" alt="Movie Reviewer logo" width="120" height="120">
+  <h1>Movie Reviewer</h1>
+  <p>A full-stack movie app: browse films, watch trailers and post reviews.<br>React front end · Java Spring Boot REST API · MongoDB</p>
 </div>
 
+## Overview
 
+Movie Reviewer is an IMDb-style web app. The React client shows a carousel of movies with their artwork. Each movie links to its YouTube trailer and a reviews page where visitors can read and add reviews. The Spring Boot API serves the movie catalogue and saves new reviews to MongoDB.
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
+**What it demonstrates**
 
+- A layered Spring Boot API: **controller → service → repository**, with constructor injection and no framework magic in the domain classes
+- **Spring Data MongoDB:** derived queries (`findMovieByImdbId`), `@DocumentReference` relationships, and an atomic `$push` through `MongoTemplate`
+- Consistent JSON errors from a `@RestControllerAdvice` (`400` for invalid input, `404` for unknown movies, `201` on create)
+- Configuration through environment variables, with no credentials in the code
+- A React 18 client using React Router, Axios, React Bootstrap, MUI and React Player
 
+## Architecture
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
-<a href="https://github.com/CarltonOsinde/Video-MP3-Converter">
-    <img src="assets/product_screenshot.png" alt="Product Screenshot">
-</a>
+```mermaid
+flowchart LR
+  subgraph Client["client/ (React 18)"]
+    H["Hero carousel"] --> R["Reviews page"]
+    H --> T["Trailer player"]
+  end
+  Client -- "Axios · JSON" --> MC
+  subgraph API["server/ (Spring Boot 3, Java 17)"]
+    MC["MovieController<br/>ReviewController"] --> S["MovieService<br/>ReviewService"]
+    S --> RP["MovieRepository<br/>ReviewRepository"]
+    S --> MT["MongoTemplate<br/>($push review ref)"]
+  end
+  RP --> DB[("MongoDB<br/>movies · reviews")]
+  MT --> DB
+```
 
-This is a React app that loads movie suggestions from a MongoDB database & uses Java Spring Boot backend to handle requests.
+When a review is posted, it's saved in the `reviews` collection, and its id is pushed onto the movie's `reviews` array. Because the movie stores references rather than copies, movie documents stay small however many reviews they collect.
 
+## API
 
+| Method | Route | Description |
+| --- | --- | --- |
+| GET | `/api/v1/movies` | All movies |
+| GET | `/api/v1/movies/{imdbId}` | One movie with its reviews (`404` if not found) |
+| POST | `/api/v1/reviews` | Body `{"reviewBody": "...", "imdbId": "tt..."}` → `201` with the saved review |
 
-### Built With
+## Getting started
 
-* Java (Spring Boot)
-* Javascript(React.js)
-* MongoDB
-* Axios HTTP
+**Prerequisites:** Java 17+, Node.js 18+, and a MongoDB connection string (a free MongoDB Atlas cluster works).
 
+```sh
+git clone https://github.com/CarltonOsinde/Movie-Reviewer.git
+cd Movie-Reviewer
 
-<!-- USAGE EXAMPLES -->
-## Demo
+# 1. API  →  http://localhost:8080
+cd server
+cp .env.example .env          # add your MONGO_URI
+./mvnw spring-boot:run
 
-Screenshots, code examples and demos will be added in this space. Stay tuned.
+# 2. Client  →  http://localhost:3000   (new terminal)
+cd ../client
+cp .env.example .env          # REACT_APP_API_URL=http://localhost:8080
+npm install
+npm start
+```
 
+Run the API tests with `./mvnw test`.
 
+### Data
 
+Movies are read from the `movies` collection. Each document looks like this (the URLs are placeholders):
 
-<!-- GETTING STARTED -->
-## Getting Started
+```json
+{
+  "imdbId": "tt0000001",
+  "title": "Example Movie",
+  "releaseDate": "2022-01-01",
+  "trailerLink": "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+  "poster": "https://example.com/poster.jpg",
+  "genres": ["Drama"],
+  "backdrops": ["https://example.com/backdrop.jpg"],
+  "reviews": []
+}
+```
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+## Project structure
 
-### Prerequisites
+```
+server/src/main/java/com/example/moviereviewer/
+  controller/   REST endpoints
+  service/      business rules (validation, linking reviews to movies)
+  repository/   Spring Data MongoDB repositories
+  model/        Movie and Review documents
+  dto/          request bodies
+  exception/    not-found exception + global error handler
+  config/       CORS configuration
+client/src/
+  api/          Axios instance (base URL from REACT_APP_API_URL)
+  components/   hero carousel, trailer, reviews, review form, header
+```
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/CarltonOsinde/Video-MP3-Converter.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. Good to code!
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-
-<!-- CONTACT -->
 ## Contact
 
- [LinkedIn](https://linkedin/in/carltonosinde/) - [Email](carltonosinde@gmail.com) - [Website](https://carltonosinde.com)
-
-
-
-
-
-<!-- ACKNOWLEDGMENTS
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
--->
+Carlton Osinde Makini · [LinkedIn](https://www.linkedin.com/in/carltonosinde/) · [carltonosinde.com](https://carltonosinde.com) · [Email](mailto:carltonosinde@gmail.com)

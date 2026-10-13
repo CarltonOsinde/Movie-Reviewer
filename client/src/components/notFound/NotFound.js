@@ -1,11 +1,12 @@
-import React from 'react'
+import { Link } from "react-router-dom";
 
 const NotFound = () => {
   return (
-    <div>
-        This page could not be found
+    <div className="text-center mt-5">
+      <h3>Page not found</h3>
+      <Link to="/">Back to movies</Link>
     </div>
-  )
-}
+  );
+};
 
-export default NotFound
+export default NotFound;

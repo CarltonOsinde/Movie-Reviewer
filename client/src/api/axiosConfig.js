@@ -1,6 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
-export default axios.create({
-    baseURL:'https://9c96-103-106-239-104.ap.ngrok.io',
-    headers: {"ngrok-skip-browser-warning": "true"}
+// Base URL of the Spring Boot API. Set REACT_APP_API_URL in client/.env for other environments.
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:8080",
 });
+
+export default api;
